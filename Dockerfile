@@ -51,7 +51,7 @@ USER renderer
 # Configure stylesheet
 WORKDIR /home/renderer/src
 RUN git clone https://github.com/giggls/openstreetmap-carto-de.git
-WORKDIR /home/renderer/src/openstreetmap-carto
+WORKDIR /home/renderer/src/openstreetmap-carto-de
 USER root
 RUN apt-get install -y npm nodejs
 RUN npm install -g carto
@@ -60,7 +60,7 @@ RUN carto -v
 RUN carto project.mml > osm-de.xml
 
 # Load shapefiles
-WORKDIR /home/renderer/src/openstreetmap-carto
+WORKDIR /home/renderer/src/openstreetmap-carto-de
 RUN scripts/get-shapefiles.py
 
 # Install fonts
