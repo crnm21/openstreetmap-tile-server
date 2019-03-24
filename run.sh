@@ -1,15 +1,30 @@
 #!/bin/bash
 
 if [ "$#" -ne 1 ]; then
-    echo "usage: <import|run>"
+    echo "usage: <append|import|run>"
     echo "commands:"
+    echo "    append: Append the database by importing /append.osm.pbf"
     echo "    import: Set up the database and import /data.osm.pbf"
     echo "    run: Runs Apache and renderd to serve tiles at /tile/{z}/{x}/{y}.png"
     echo "environment variables:"
     echo "    THREADS: defines number of threads used for importing / tile rendering"
     exit 1
 fi
+if [ "$1" = "append" ]; then
+    # Initialize PostgreSQL
+   service postgresql start
 
+    # Stop if no append data is provided
+    if [ ! -f /append.osm.pbf ]; then
+        echo "WARNING: No append file at /append.osm.pbf, so we stop here"
+        exit 1
+    fi
+
+    # Import data
+    sudo -u renderer osm2pgsql -d gis --append --slim -G --hstore --tag-transform-script /home/renderer/src/openstreetmap-carto-de/openstreetmap-carto.lua -C 2048 --number-processes ${THREADS:-4} -S /home/renderer/src/openstreetmap-carto-de/openstreetmap-carto.style /append.osm.pbf
+
+    exit 0
+fi
 if [ "$1" = "import" ]; then
     # Initialize PostgreSQL
     service postgresql start
@@ -27,7 +42,7 @@ if [ "$1" = "import" ]; then
     fi
 
     # Import data
-    sudo -u renderer osm2pgsql -d gis --append --slim -G --hstore --tag-transform-script /home/renderer/src/openstreetmap-carto/openstreetmap-carto.lua -C 2048 --number-processes ${THREADS:-4} -S /home/renderer/src/openstreetmap-carto/openstreetmap-carto.style /data.osm.pbf
+    sudo -u renderer osm2pgsql -d gis --create --slim -G --hstore --tag-transform-script /home/renderer/src/openstreetmap-carto-de/openstreetmap-carto.lua -C 2048 --number-processes ${THREADS:-4} -S /home/renderer/src/openstreetmap-carto-de/openstreetmap-carto.style /data.osm.pbf
 
     exit 0
 fi
