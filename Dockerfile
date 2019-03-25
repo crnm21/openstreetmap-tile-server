@@ -94,7 +94,7 @@ RUN apt-get update
 RUN git clone https://github.com/giggls/mapnik-german-l10n.git
 WORKDIR /home/renderer/src/mapnik-german-l10n
 RUN apt-get install -y devscripts equivs
-RUN mk-build-deps -i /home/renderer/src/mapnik-german-l10n/debian/control
+RUN mk-build-deps -i /home/renderer/src/mapnik-german-l10n/debian/control -t "apt-get -o Debug::pkgProblemResolver=yes --no-install-recommends -y"
 USER renderer
 RUN mkdir build
 WORKDIR /home/renderer/src/mapnik-german-l10n/build
