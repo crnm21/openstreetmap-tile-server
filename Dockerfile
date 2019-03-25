@@ -88,7 +88,7 @@ USER renderer
 # Install PostgreSQL
 USER root
 RUN apt-get install -y postgresql postgresql-contrib postgis postgresql-10-postgis-2.4
-RUN apt-get install devscripts equivs 
+RUN apt-get install -y devscripts equivs 
 RUn mk-build-deps -i debian/control
 USER renderer
 RUN mkdir build
