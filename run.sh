@@ -21,7 +21,7 @@ if [ "$1" = "append" ]; then
     fi
 
     # Import data
-    sudo -u renderer osm2pgsql -d gis --append --slim -G -S hstore-only.style --hstore --tag-transform-script /home/renderer/src/openstreetmap-carto-de/openstreetmap-carto.lua -C 2048 --number-processes ${THREADS:-4} -p planet_osm_hstore /append.osm.pbf
+    sudo -u renderer osm2pgsql -d gis --append --slim -G -S /home/renderer/src/openstreetmap-carto-de/hstore-only.style --hstore --tag-transform-script /home/renderer/src/openstreetmap-carto-de/openstreetmap-carto.lua -C 2048 --number-processes ${THREADS:-4} -p planet_osm_hstore /append.osm.pbf
 
     exit 0
 fi
@@ -43,7 +43,7 @@ if [ "$1" = "import" ]; then
     fi
 
     # Import data
-    sudo -u renderer osm2pgsql -d gis --create --slim -G -S hstore-only.style --hstore --tag-transform-script /home/renderer/src/openstreetmap-carto-de/openstreetmap-carto.lua -C 2048 --number-processes ${THREADS:-4} -p planet_osm_hstore /data.osm.pbf
+    sudo -u renderer osm2pgsql -d gis --create --slim -G -S /home/renderer/src/openstreetmap-carto-de/hstore-only.style --hstore --tag-transform-script /home/renderer/src/openstreetmap-carto-de/openstreetmap-carto.lua -C 2048 --number-processes ${THREADS:-4} -p planet_osm_hstore /data.osm.pbf
     sudo -u renderer postgres psql -d gis -f /home/renderer/src/openstreetmap-carto-de/osm_tag2num.sql
     sudo -u renderer /home/renderer/src/openstreetmap-carto-de/views_osmde/apply-views.sh gis de
     exit 0
