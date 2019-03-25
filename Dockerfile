@@ -99,12 +99,9 @@ RUN mk-build-deps -i /home/renderer/src/mapnik-german-l10n/debian/control -t "ap
 USER renderer
 RUN mkdir build
 WORKDIR /home/renderer/src/mapnik-german-l10n/build
-RUN cmake ..
 RUN make
 USER root
 RUN make install
-USER renderer
-
 USER renderer
 
 # Start running
