@@ -43,7 +43,7 @@ if [ "$1" = "import" ]; then
 
     # Import data
     sudo -u renderer osm2pgsql -d gis --create --slim -G -S hstore-only.style --hstore --tag-transform-script /home/renderer/src/openstreetmap-carto-de/openstreetmap-carto.lua -C 2048 --number-processes ${THREADS:-4} -S /home/renderer/src/openstreetmap-carto-de/openstreetmap-carto.style /data.osm.pbf
-   
+    sudo -u renderer /home/renderer/src/openstreetmap-carto-de/views_osmde/apply-views.sh osm de
     exit 0
 fi
 
