@@ -97,9 +97,7 @@ USER root
 RUN apt-get install -y devscripts equivs
 RUN mk-build-deps -i /home/renderer/src/mapnik-german-l10n/debian/control -t "apt-get -o Debug::pkgProblemResolver=yes --no-install-recommends -y"
 USER renderer
-RUN mkdir build
 RUN make deb
-WORKDIR /home/renderer/src/mapnik-german-l10n/build
 USER root
 RUN make install
 USER renderer
