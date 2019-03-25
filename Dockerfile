@@ -88,6 +88,17 @@ USER renderer
 # Install PostgreSQL
 USER root
 RUN apt-get install -y postgresql postgresql-contrib postgis postgresql-10-postgis-2.4
+RUN apt-get install devscripts equivs sudo mk-build-deps -i debian/control
+USER renderer
+RUN mkdir build
+RUN git clone https://github.com/giggls/mapnik-german-l10n.git
+WORKDIR /build
+RUN cmake ..
+RUN make
+USER root
+RUN make install
+USER renderer
+
 USER renderer
 
 # Start running
