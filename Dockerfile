@@ -92,7 +92,8 @@ RUN apt-get install -y postgresql postgresql-contrib postgis postgresql-10-postg
 RUN sed -Ei 's/^# deb-src /deb-src /' /etc/apt/sources.list
 RUN git clone https://github.com/giggls/mapnik-german-l10n.git
 WORKDIR /home/renderer/src/mapnik-german-l10n
-RUN apt-get install -y devscripts equivs sudo mk-build-deps -i /home/renderer/src/mapnik-german-l10n/debian/control
+RUN apt-get install -y devscripts equivs
+RUN mk-build-deps osml10n -i /home/renderer/src/mapnik-german-l10n/debian/control
 USER renderer
 RUN mkdir build
 WORKDIR /home/renderer/src/mapnik-german-l10n/build
