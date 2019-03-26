@@ -96,7 +96,7 @@ WORKDIR /home/renderer/src/mapnik-german-l10n
 USER root
 RUN pwd
 RUN ls
-RUN apt-get install -y devscripts equivs
+RUN apt-get install -y curl devscripts equivs
 RUN mk-build-deps -i /home/renderer/src/mapnik-german-l10n/debian/control -t "apt-get -o Debug::pkgProblemResolver=yes --no-install-recommends -y"
 RUN make deb
 RUN make install
