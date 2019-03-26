@@ -56,7 +56,7 @@ USER root
 RUN apt-get install -y npm nodejs
 RUN npm install -g carto
 USER renderer
-RUN make
+RUN make deb
 USER root
 RUN make install
 
