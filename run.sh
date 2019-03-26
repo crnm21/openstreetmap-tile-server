@@ -1,11 +1,12 @@
 #!/bin/bash
 
 if [ "$#" -ne 1 ]; then
-    echo "usage: <append|import|run>"
+    echo "usage: <append|import|run|debug>"
     echo "commands:"
     echo "    append: Append the database by importing /append.osm.pbf"
     echo "    import: Set up the database and import /data.osm.pbf"
     echo "    run: Runs Apache and renderd to serve tiles at /tile/{z}/{x}/{y}.png"
+    echo "    debug: Debug postgres and/or apache mod_tile"
     echo "environment variables:"
     echo "    THREADS: defines number of threads used for importing / tile rendering"
     exit 1
@@ -61,6 +62,16 @@ if [ "$1" = "run" ]; then
     # Run
     sudo -u renderer renderd -f -c /usr/local/etc/renderd.conf
 
+    exit 0
+fi
+
+if [ "$1" = "debug" ]; then
+    echo "You are in debug mode"
+    echo "Useful commands:"
+    echo "Start Postgres: 'service postgresql start' "
+    echo "Start Apache: 'service apache2 restart' "
+    echo "Start Rendering: 'sudo -u renderer renderd -f -c /usr/local/etc/renderd.conf' "
+    /bin/bash
     exit 0
 fi
 
