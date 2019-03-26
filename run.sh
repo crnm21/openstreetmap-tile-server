@@ -22,7 +22,7 @@ if [ "$1" = "append" ]; then
     fi
 
     # Append data
-    sudo -u renderer osm2pgsql -d gis --append --slim -G -S /home/renderer/src/openstreetmap-carto-de/hstore-only.style --hstore --tag-transform-script /home/renderer/src/openstreetmap-carto-de/openstreetmap-carto.lua -C 2048 --number-processes ${THREADS:-4} -p planet_osm_hstore /append.osm.pbf
+    sudo -u renderer osm2pgsql -d osm --append --slim -G -S /home/renderer/src/openstreetmap-carto-de/hstore-only.style --hstore --tag-transform-script /home/renderer/src/openstreetmap-carto-de/openstreetmap-carto.lua -C 2048 --number-processes ${THREADS:-4} -p planet_osm_hstore /append.osm.pbf
 
     exit 0
 fi
@@ -30,12 +30,12 @@ if [ "$1" = "import" ]; then
     # Initialize PostgreSQL
     service postgresql start
     sudo -u postgres createuser renderer
-    sudo -u postgres createdb -E UTF8 -O renderer gis
-    sudo -u postgres psql -d gis -c "CREATE EXTENSION postgis;"
-    sudo -u postgres psql -d gis -c "CREATE EXTENSION hstore;"
-    sudo -u postgres psql -d gis -c "CREATE EXTENSION osml10n CASCADE;"
-    sudo -u postgres psql -d gis -c "ALTER TABLE geometry_columns OWNER TO renderer;"
-    sudo -u postgres psql -d gis -c "ALTER TABLE spatial_ref_sys OWNER TO renderer;"
+    sudo -u postgres createdb -E UTF8 -O renderer osm
+    sudo -u postgres psql -d osm -c "CREATE EXTENSION postgis;"
+    sudo -u postgres psql -d osm -c "CREATE EXTENSION hstore;"
+    sudo -u postgres psql -d osm -c "CREATE EXTENSION osml10n CASCADE;"
+    sudo -u postgres psql -d osm -c "ALTER TABLE geometry_columns OWNER TO renderer;"
+    sudo -u postgres psql -d osm -c "ALTER TABLE spatial_ref_sys OWNER TO renderer;"
 
     # Download Luxembourg as sample if no data is provided
     if [ ! -f /data.osm.pbf ]; then
@@ -44,10 +44,10 @@ if [ "$1" = "import" ]; then
     fi
 
     # Import data
-    sudo -u renderer osm2pgsql -d gis --create --slim -G -S /home/renderer/src/openstreetmap-carto-de/hstore-only.style --hstore --tag-transform-script /home/renderer/src/openstreetmap-carto-de/openstreetmap-carto.lua -C 2048 --number-processes ${THREADS:-4} -p planet_osm_hstore /data.osm.pbf
-    sudo -u renderer psql -d gis -f /home/renderer/src/openstreetmap-carto-de/osm_tag2num.sql
-    sudo -u renderer psql -d gis -f /home/renderer/src/openstreetmap-carto-de/indexes-hstore.sql
-    sudo -u renderer /home/renderer/src/openstreetmap-carto-de/views_osmde/apply-views.sh gis de
+    sudo -u renderer osm2pgsql -d osm --create --slim -G -S /home/renderer/src/openstreetmap-carto-de/hstore-only.style --hstore --tag-transform-script /home/renderer/src/openstreetmap-carto-de/openstreetmap-carto.lua -C 2048 --number-processes ${THREADS:-4} -p planet_osm_hstore /data.osm.pbf
+    sudo -u renderer psql -d osm -f /home/renderer/src/openstreetmap-carto-de/osm_tag2num.sql
+    sudo -u renderer psql -d osm -f /home/renderer/src/openstreetmap-carto-de/indexes-hstore.sql
+    sudo -u renderer /home/renderer/src/openstreetmap-carto-de/views_osmde/apply-views.sh osm de
     exit 0
 fi
 
@@ -57,7 +57,7 @@ if [ "$1" = "run" ]; then
     service apache2 restart
 
     # Configure renderd threads
-    sed -i -E "s/num_threads=[0-9]+/num_threads=${THREADS:-4}/g" /usr/local/etc/renderd.conf
+    sed -i -E "s/num_threads=[0-9]+/num_threads=${THREADS:-2}/g" /usr/local/etc/renderd.conf
 
     # Run
     sudo -u renderer renderd -f -c /usr/local/etc/renderd.conf
