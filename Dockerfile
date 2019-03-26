@@ -57,7 +57,7 @@ RUN apt-get install -y npm nodejs
 RUN npm install -g carto
 USER renderer
 RUN carto -v
-RUN carto project.mml > mapnik.xml
+RUN carto project.mml > osm-de.xml
 
 # Load shapefiles
 WORKDIR /home/renderer/src/openstreetmap-carto-de
