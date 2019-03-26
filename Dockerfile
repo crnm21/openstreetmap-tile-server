@@ -90,10 +90,8 @@ USER root
 RUN apt-get install -y postgresql postgresql-contrib postgis postgresql-10-postgis-2.4
 RUN sed -Ei 's/^# deb-src /deb-src /' /etc/apt/sources.list
 RUN apt-get update
-USER renderer
 RUN git clone https://github.com/giggls/mapnik-german-l10n.git
 WORKDIR /home/renderer/src/mapnik-german-l10n
-USER root
 RUN pwd
 RUN ls
 RUN apt-get install -y curl devscripts equivs
