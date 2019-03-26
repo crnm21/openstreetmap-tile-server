@@ -102,6 +102,7 @@ RUN mk-build-deps -i /home/renderer/src/mapnik-german-l10n/debian/control -t "ap
 RUN make deb
 RUN make install
 USER renderer
+WORKDIR /home/renderer/src
 
 # Start running
 USER root
