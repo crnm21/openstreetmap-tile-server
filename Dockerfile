@@ -71,6 +71,8 @@ USER renderer
 USER root
 RUN sed -i 's/renderaccount/renderer/g' /usr/local/etc/renderd.conf
 RUN sed -i 's/hot/tile/g' /usr/local/etc/renderd.conf
+RUN sed -i 's/openstreetmap-carto/openstreetmap-carto-de/g' /usr/local/etc/renderd.conf
+RUN sed -i '/XML/s/mapnik.xml/osm-de.xml/g' /usr/local/etc/renderd.conf
 USER renderer
 
 # Configure Apache
