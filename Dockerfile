@@ -105,6 +105,13 @@ RUN make install
 USER renderer
 WORKDIR /home/renderer/src
 
+# Configure PosgtreSQL
+USER root
+COPY postgresql.local.conf /etc/postgresql/10/main/
+RUN chown -R postgres:postgres /var/lib/postgresql \
+  && chown postgres:postgres /etc/postgresql/10/main/postgresql.local.conf \
+&& echo "\ninclude 'postgresql.local.conf'" >> /etc/postgresql/10/main/postgresql.conf
+
 # Start running
 USER root
 RUN apt-get install -y sudo
