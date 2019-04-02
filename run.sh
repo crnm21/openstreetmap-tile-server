@@ -22,7 +22,7 @@ if [ "$1" = "append" ]; then
     fi
 
     # Append data
-    sudo -u renderer osm2pgsql -d osm --append --slim -G -S /home/renderer/src/openstreetmap-carto-de/hstore-only.style --hstore --tag-transform-script /home/renderer/src/openstreetmap-carto-de/openstreetmap-carto.lua -C 24000 --number-processes ${THREADS:-8} -p planet_osm_hstore /append.osm.pbf
+    sudo -u renderer osm2pgsql -d osm --append --slim -G -S /home/renderer/src/openstreetmap-carto-de/hstore-only.style --hstore --tag-transform-script /home/renderer/src/openstreetmap-carto-de/openstreetmap-carto.lua -C 48000 --number-processes ${THREADS:-8} -p planet_osm_hstore /append.osm.pbf
 
     exit 0
 fi
@@ -44,7 +44,7 @@ if [ "$1" = "import" ]; then
     fi
 
     # Import data
-    sudo -u renderer osm2pgsql -d osm --create --slim -G -S /home/renderer/src/openstreetmap-carto-de/hstore-only.style --hstore --tag-transform-script /home/renderer/src/openstreetmap-carto-de/openstreetmap-carto.lua -C 24000 --number-processes ${THREADS:-8} -p planet_osm_hstore /data.osm.pbf
+    sudo -u renderer osm2pgsql -d osm --create --slim -G -S /home/renderer/src/openstreetmap-carto-de/hstore-only.style --hstore --tag-transform-script /home/renderer/src/openstreetmap-carto-de/openstreetmap-carto.lua -C 48000 --number-processes ${THREADS:-8} -p planet_osm_hstore /data.osm.pbf
     sudo -u renderer psql -d osm -f /home/renderer/src/openstreetmap-carto-de/osm_tag2num.sql
     sudo -u renderer psql -d osm -f /home/renderer/src/openstreetmap-carto-de/indexes-hstore.sql
     sudo -u renderer /home/renderer/src/openstreetmap-carto-de/views_osmde/apply-views.sh osm de
