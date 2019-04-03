@@ -116,5 +116,5 @@ RUN chown -R postgres:postgres /var/lib/postgresql \
 USER root
 RUN apt-get install -y sudo
 COPY run.sh /
-ENTRYPOINT ["/run.sh"]
-CMD []
+ENTRYPOINT ["/usr/bin/dumb-init", "--"]
+CMD ["/run.sh"]
